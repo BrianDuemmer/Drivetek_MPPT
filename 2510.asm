@@ -64,7 +64,7 @@ SPI_WriteD	MACRO	Reg,RegData
 ;**********************************************************************
 ;		INIT MCP2510 CAN-Controller
 ;
-;		Physical layer configuration:
+;		Original Physical layer configuration:
 ;		- Fosc       = 20 MHz
 ;		- BRP        = 10
 ;		- Sync Seg   = 1 Tq
@@ -74,6 +74,9 @@ SPI_WriteD	MACRO	Reg,RegData
 ;		- SJW        = 1 Tq
 ;		- Bus line is sampled once at the sample point
 ;		- wake-up filter disable
+;		
+;		Updated CNF1-3 to have the bus operate at 1MHz instead of the
+;		default 125KHz
 ;**********************************************************************
 
 Init2510	call	Reset2510
@@ -85,11 +88,11 @@ Init2510	call	Reset2510
 		movlw	CANCTRL		; CAN control register of MCP2510
 		call	BitMod2510
 
-		SPI_WriteL CNF1,B'00000100'	; config register 1 of MCP2510 (Bitiming)
+		SPI_WriteL CNF1,B'00000000'	; config register 1 of MCP2510 (Bitiming)
 
-		SPI_WriteL CNF2,B'10001110'	; config register 2 of MCP2510
+		SPI_WriteL CNF2,B'10010011'	; config register 2 of MCP2510
 
-		SPI_WriteL CNF3,B'00000101'	; config register 3 of MCP2510
+		SPI_WriteL CNF3,B'00000100'	; config register 3 of MCP2510
 
 		SPI_WriteL CANINTE, B'00000000' ; int on RX0 full
 						; no int on TX0/1/2 empty  
